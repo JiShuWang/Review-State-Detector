@@ -53,7 +53,7 @@ def GetArticleState(url, usernamexpath, passwordxpath, username, password, login
             state = driver.find_element(By.XPATH, statexpath).text
             print(state, datetime.datetime.now())
             # 如果每次状态更新,你希望通过邮件接收的话,否则请注释这行代码
-            SendEmail("", "", "", "smtp.qq.com", state)  # 请自行设置
+            SendEmail("请替换为您的发送邮箱", "请替换为发送邮箱的授权码", "请替换为您的接收邮箱，建议发送邮箱与接收邮箱一致，例如都为QQ邮箱，这样可以避免邮件被误收到垃圾邮箱中", "smtp.qq.com", state)  # 请自行设置
         time.sleep(60)  # 每隔多少秒后刷新一次状态,初始设置为1分钟(60秒)
 
 
@@ -87,7 +87,7 @@ if __name__ == '__main__':
     GetArticleState("https://mc.manuscriptcentral.com/t-its",
                     "/html/body/div[1]/form/div[6]/div/div/div[1]/div[1]/div[2]/fieldset/div[2]/input",
                     "/html/body/div[1]/form/div[6]/div/div/div[1]/div[1]/div[2]/fieldset/div[3]/div/div/input[1]",
-                    "cswangjishu@hotmail.com", "w262151847",
+                    "请替换为你的投稿账号", "请替换为你的投稿密码",
                     "/html/body/div[1]/form/div[6]/div/div/div[1]/div[1]/div[2]/fieldset/div[4]/a",
                     "/html/body/div[1]/form/div[3]/div/div[2]/div[5]/div/table/tbody/tr/td[1]/table/tbody/tr/td[2]/span")  # ScholarOne投稿系统可直接采用这个
     # 可将函数针对不同的期刊网站(如Editorial Manager、ScholarOne等)设置不同的参数,每次具体调用即可
