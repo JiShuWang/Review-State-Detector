@@ -23,6 +23,6 @@
 ### Address: Yunnan University
 ### Website: http://www.loveffc.cn
 ### Contact: cswangjishu@hotmail.com
-### Note that: if you need use this tool, please click "Star" for my GitHub.
+### Note that: 如果您要使用该工具，或者进行任何本地化的改动，请记得点亮Star，这是对我的莫大鼓励。
 ## ————谢谢————
 
