@@ -7,9 +7,9 @@ Note that: if you need use this tool, please click "Star" for my GitHub.
 """
 # 获取时间的库
 import datetime
+import time
 # 发送邮件需要的库
 import smtplib
-import time
 from email.header import Header
 from email.mime.text import MIMEText
 
@@ -25,6 +25,7 @@ https://chromedriver.storage.googleapis.com/index.html
 点击此链接，根据你Chrome(谷歌)浏览器的版本,下载对应的chromedriver,并解压,然后将chromedriver的文件地址替换掉上述的地址
 """
 
+state = ""# 审稿状态
 
 def GetArticleState(url, usernamexpath, passwordxpath, username, password, loginbuttonxpath, statexpath):  # 定时获取审稿状态
     """
@@ -34,7 +35,7 @@ def GetArticleState(url, usernamexpath, passwordxpath, username, password, login
     loginbuttonxpath:string
     statexpath:string,存放你审稿状态的元素的XPATH
     """
-
+    global state
     driver = webdriver.Chrome(executable_path=chromedriver_path, chrome_options=option)
     driver.get(url)
     driver.find_element(By.XPATH, usernamexpath).send_keys(username)
@@ -44,17 +45,14 @@ def GetArticleState(url, usernamexpath, passwordxpath, username, password, login
     driver.find_element(By.XPATH, "/html/body/div[1]/form/div[1]/div/div[3]/div/ul/li[2]/a").click()
     # 这里写具体点击跳转元素的XPATH
 
-    state = ""  # 审稿状态
-    while True:
-        # 通过点击刚才获得的跳转按钮,实现刷新页面获取审稿状态
-        driver.find_element(By.XPATH,
-                            "/html/body/div[1]/form/div[1]/div/div[3]/div/ul/li[2]/a").click()
-        if driver.find_element(By.XPATH, statexpath).text != state:  # 如果审稿状态发生改变,则发送邮件通知
-            state = driver.find_element(By.XPATH, statexpath).text
-            print(state, datetime.datetime.now())
-            # 如果每次状态更新,你希望通过邮件接收的话,否则请注释这行代码
-            SendEmail("请替换为您的发送邮箱", "请替换为发送邮箱的授权码", "请替换为您的接收邮箱，建议发送邮箱与接收邮箱一致，例如都为QQ邮箱，这样可以避免邮件被误收到垃圾邮箱中", "smtp.qq.com", state)  # 请自行设置
-        time.sleep(60)  # 每隔多少秒后刷新一次状态,初始设置为1分钟(60秒)
+    # 通过点击刚才获得的跳转按钮,实现刷新页面获取审稿状态
+    driver.find_element(By.XPATH,
+                        "/html/body/div[1]/form/div[1]/div/div[3]/div/ul/li[2]/a").click()
+    if driver.find_element(By.XPATH, statexpath).text != state:  # 如果审稿状态发生改变,则发送邮件通知
+        state = driver.find_element(By.XPATH, statexpath).text
+        print(state, datetime.datetime.now())
+        # 如果每次状态更新,你希望通过邮件接收的话,否则请注释这行代码
+        SendEmail("发送者邮箱", "邮箱校验码", "接收者邮箱", "smtp.qq.com", state)#发送者与接收者可为同一个
 
 
 def SendEmail(fromaddress, frompassword, toaddress, mailserver, state):  # 发送最新审稿状态的邮件
@@ -84,12 +82,14 @@ def SendEmail(fromaddress, frompassword, toaddress, mailserver, state):  # 发�
 
 
 if __name__ == '__main__':
-    GetArticleState("https://mc.manuscriptcentral.com/t-its",
+    while True:
+        GetArticleState("https://mc.manuscriptcentral.com/t-its",
                     "/html/body/div[1]/form/div[6]/div/div/div[1]/div[1]/div[2]/fieldset/div[2]/input",
                     "/html/body/div[1]/form/div[6]/div/div/div[1]/div[1]/div[2]/fieldset/div[3]/div/div/input[1]",
-                    "请替换为你的投稿账号", "请替换为你的投稿密码",
+                    "投稿系统用户名", "投稿系统密码",
                     "/html/body/div[1]/form/div[6]/div/div/div[1]/div[1]/div[2]/fieldset/div[4]/a",
-                    "/html/body/div[1]/form/div[3]/div/div[2]/div[5]/div/table/tbody/tr/td[1]/table/tbody/tr/td[2]/span")  # ScholarOne投稿系统可直接采用这个
+                    "/html/body/div[1]/form/div[3]/div/div[2]/div[5]/div/table/tbody/tr/td[1]/table/tbody/tr/td[2]/span")  # ScholarOne投稿系统(IEEE、IET)可直接采用这个
+        time.sleep(1800)  # 每隔多少秒后刷新一次状态,初始设置为30分钟(1800秒)
     # 可将函数针对不同的期刊网站(如Editorial Manager、ScholarOne等)设置不同的参数,每次具体调用即可
     # GetArticleState("")
     # GetArticleState("")
