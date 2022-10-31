@@ -87,14 +87,14 @@ if __name__ == '__main__':
             GetArticleState("https://mc.manuscriptcentral.com/t-its",
                             "/html/body/div[1]/form/div[6]/div/div/div[1]/div[1]/div[2]/fieldset/div[2]/input",
                             "/html/body/div[1]/form/div[6]/div/div/div[1]/div[1]/div[2]/fieldset/div[3]/div/div/input[1]",
-                            "cswangjishu@hotmail.com", "w262151847",
+                            "投稿系统账号", "投稿系统密码",
                             "/html/body/div[1]/form/div[6]/div/div/div[1]/div[1]/div[2]/fieldset/div[4]/a",
                             "/html/body/div[1]/form/div[3]/div/div[2]/div[5]/div/table/tbody/tr/td[1]/table/tbody/tr/td[2]/span")  # ScholarOne投稿系统(IEEE、IET)可直接采用这个
         except Exception as e:
             GetArticleState("https://mc.manuscriptcentral.com/t-its",
                             "/html/body/div[1]/form/div[6]/div/div/div[1]/div[1]/div[2]/fieldset/div[2]/input",
                             "/html/body/div[1]/form/div[6]/div/div/div[1]/div[1]/div[2]/fieldset/div[3]/div/div/input[1]",
-                            "cswangjishu@hotmail.com", "w262151847",
+                            "投稿系统账号", "投稿系统密码",
                             "/html/body/div[1]/form/div[6]/div/div/div[1]/div[1]/div[2]/fieldset/div[4]/a",
                             "/html/body/div[1]/form/div[3]/div/div[2]/div[5]/div/table/tbody/tr/td[1]/table/tbody/tr/td[2]/span")  # ScholarOne投稿系统(IEEE、IET)可直接采用这个
         time.sleep(1800)  # 每隔多少秒后刷新一次状态,初始设置为30分钟(1800秒)
