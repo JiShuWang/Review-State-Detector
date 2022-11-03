@@ -1,4 +1,4 @@
-# Reviewer-State-Detector
+# Review-State-Detector
 # 2022.11.01 Version
 正在使用C# WPF技术实现可视化的PC端桌面软件，以进一步提升使用体验与便捷程度，敬请期待。
 # 2022.09.25 Version 
