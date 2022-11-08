@@ -20,8 +20,6 @@ Note that: 如果您要使用该工具，或者进行任何本地化的改动，
 ## 以下为Python版ReadMe
 ## 主要功能
 针对当前不需验证码的投稿系统，该脚本可以高效定时的获取论文的审稿状态，包括IEEE与IET使用的ScholarOne、Elsevier与Spring使用的Editorial Manager、MDPI、Hindawi等投稿系统。
-## 性能
-一次打开，即可一直保持状态的监测，尽可能地降低了内存占用。
 ## 步骤
 ## 1.下载Chrome浏览器
 链接：https://www.google.cn/intl/zh-CN/chrome/
