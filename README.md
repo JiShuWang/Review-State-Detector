@@ -5,17 +5,18 @@
 ### Blog (Website): http://www.loveffc.cn:8080
 ### Contact: cswangjishu@hotmail.com
 ### Note that: 如果您要使用该工具，或者进行任何本地化的改动，请记得点亮Star，这是对我的莫大鼓励。
-## Thanks!
 
 
 ## 以下为C# WPF版ReadMe
-## 2022.11.01 Version
+## 2022.11.23 Version 1.0
+已覆盖Scholarone、Editorial Manager、MDPI三个投稿系统，详细测试后提交第一版。  
+## 2022.11.01 Version 0.0
 正在使用C# WPF技术实现可视化的PC端桌面版本，以进一步提升使用体验与便捷程度，敬请期待。
 实现中，欢迎通过邮件等方式提供建议以及Commit。  
   
     
 ## 以下为Python版ReadMe
-### 2022.09.25 Version 
+### 2022.09.25 Version 1.0
 使用Python实现的审稿状态监测器。
 等待论文的审稿状态是煎熬且期待的，对于很多的研究人员来说，投稿之后，其每天都会花费时间进入投稿系统查看自己论文的审稿状态进入到哪一步，这样的工作是重复性且枯燥的，更致命的一点是，许多时候，研究人员无法第一时间知悉审稿状态的变化，例如10月1日审稿状态变为了“Awaiting Reviewer Scores”，但研究人员10月3日才登录系统，因此其很难知道这个状态是哪一天改变的。
 基于此，我使用Python编写了一个审稿状态检测器。
