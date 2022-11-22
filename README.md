@@ -23,8 +23,8 @@
 针对当前不需验证码的投稿系统，该脚本可以高效定时的获取论文的审稿状态，包括IEEE与IET使用的ScholarOne、Elsevier与Spring使用的Editorial Manager、MDPI、Hindawi等投稿系统。
 ## 步骤
 ## 1.下载Chrome浏览器
-链接：https://www.google.cn/intl/zh-CN/chrome/
-  Chrome浏览器默认自动更新，会导致Chromedriver无法匹配，如果您想更好的使用该脚本，请关闭Chrome浏览器的自动更新。链接：https://blog.csdn.net/weixin_37858453/article/details/126600461
+链接：https://www.google.cn/intl/zh-CN/chrome/  
+Chrome浏览器默认自动更新，会导致Chromedriver无法匹配，如果您想更好的使用该脚本，请关闭Chrome浏览器的自动更新。链接：https://blog.csdn.net/weixin_37858453/article/details/126600461
 ## 2.下载Chrome浏览器对应版本的Chromedriver驱动程序
 查看Chrome浏览器的版本：右上角设置栏 -> 帮助 -> 关于Google Chrome -> “版本 XXXX（正式版本） （64 位）”
 链接：https://registry.npmmirror.com/binary.html?path=chromedriver/
