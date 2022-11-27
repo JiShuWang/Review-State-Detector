@@ -4,12 +4,12 @@
 ### Address: Yunnan University
 ### Blog (Website): http://www.loveffc.cn:8080
 ### Contact: cswangjishu@hotmail.com
-### Note that: 如果您要使用该工具，或者进行任何本地化的改动，请记得点亮Star，这是对我的莫大鼓励。
+### Note that: 如果您要使用该工具，或者进行任何本地化的改动，请记得点亮Star，这是对我的莫大鼓励。有好的建议或在使用过程中发现Bug请联系我~
 
 
 ## 以下为C# WPF版ReadMe
 ## 2022.11.23 Version 1.0
-已覆盖Scholarone、Editorial Manager、MDPI三个投稿系统，详细测试后提交第一版。  
+已覆盖Scholarone、Editorial Manager、MDPI三个投稿系统，已Commit第一版的可执行文件，之后将代码开源，供大家一起完善。  
 ## 2022.11.01 Version 0.0
 正在使用C# WPF技术实现可视化的PC端桌面版本，以进一步提升使用体验与便捷程度，敬请期待。
 实现中，欢迎通过邮件等方式提供建议以及Commit。  
