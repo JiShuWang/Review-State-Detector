@@ -7,9 +7,9 @@ Note that: if you need use this tool, please click "Star" for my GitHub.
 """
 # 获取时间的库
 import datetime
-import time
 # 发送邮件需要的库
 import smtplib
+import time
 from email.header import Header
 from email.mime.text import MIMEText
 
@@ -18,16 +18,37 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 
 option = webdriver.ChromeOptions()
-option.add_argument('headless')  # 浏览器后台运行
+# option.add_argument('headless')  # 浏览器后台运行
 chromedriver_path = 'chromedriver.exe'  # chromedriver的地址
 """
 https://chromedriver.storage.googleapis.com/index.html
 点击此链接，根据你Chrome(谷歌)浏览器的版本,下载对应的chromedriver,并解压,然后将chromedriver的文件地址替换掉上述的地址
 """
 
-state = ""# 审稿状态
 
-def GetArticleState(url, usernamexpath, passwordxpath, username, password, loginbuttonxpath, statexpath):  # 定时获取审稿状态
+def ScholarOne(url, username, password):  # ScholarOne投稿系统，IEEE常用
+    """
+    url:string, 你投稿期刊的网址
+    username:string, 投稿系统的用户名
+    password:string, 投稿系统的密码
+    """
+
+    driver = webdriver.Chrome(executable_path=chromedriver_path, chrome_options=option) # 导入浏览器设置
+    driver.get(url) # 设置目标网址
+    driver.find_element(By.XPATH,"/html/body/div[1]/form/div[6]/div/div/div[1]/div[1]/div[2]/fieldset/div[2]/input").send_keys(username) # 输入用户名
+    driver.find_element(By.XPATH,"/html/body/div[1]/form/div[6]/div/div/div[1]/div[1]/div[2]/fieldset/div[3]/div/div/input[1]").send_keys(password) # 输入密码
+    driver.find_element(By.XPATH,"/html/body/div[1]/form/div[6]/div/div/div[1]/div[1]/div[2]/fieldset/div[4]/a").click() # 点击登录按钮
+    driver.find_element(By.XPATH, "/html/body/div[1]/form/div[1]/div/div[3]/div/ul/li[2]/a").click() # 点击审稿状态页面
+
+    state = ""  # 审稿状态
+    if driver.find_element(By.XPATH,"/html/body/div[1]/form/div[3]/div/div[2]/div[5]/div/table/tbody/tr[1]/td[1]/table/tbody/tr/td[2]/span").text != state:  # 如果审稿状态发生改变,则发送邮件通知
+        state = driver.find_element(By.XPATH,"/html/body/div[1]/form/div[3]/div/div[2]/div[5]/div/table/tbody/tr[1]/td[1]/table/tbody/tr/td[2]/span").text # 获取审稿状态
+        print(state, datetime.datetime.now())
+        # 如果每次状态更新,你希望通过邮件接收的话,否则请注释这行代码
+        # SendEmail("", "", "", "smtp.qq.com", state)  # 请自行设置
+
+
+def EditorialManager(url, username, password):  # EditorialManager投稿系统，Elsevier、Springer常用
     """
     url:string, 你投稿期刊的网址
     usernamexpath:string, 使用网页开发工具找到用户名输入框的XPATH,下同
@@ -35,24 +56,28 @@ def GetArticleState(url, usernamexpath, passwordxpath, username, password, login
     loginbuttonxpath:string
     statexpath:string,存放你审稿状态的元素的XPATH
     """
-    global state
+
     driver = webdriver.Chrome(executable_path=chromedriver_path, chrome_options=option)
     driver.get(url)
-    driver.find_element(By.XPATH, usernamexpath).send_keys(username)
-    driver.find_element(By.XPATH, passwordxpath).send_keys(password)
-    driver.find_element(By.XPATH, loginbuttonxpath).click()
-    # 部分网页登录后还需要点击按钮跳转一次或多次，才能到达审稿状态页面
-    driver.find_element(By.XPATH, "/html/body/div[1]/form/div[1]/div/div[3]/div/ul/li[2]/a").click()
-    # 这里写具体点击跳转元素的XPATH
+    time.sleep(10)  # EM系统访问较为缓慢，设置一个等待时间，从而保证获取页面元素
+    
+    driver.switch_to.frame("content") # EM系统的登录页面使用了JS动态加载2个iframe框架的方式，因此还需要先进入iframe中才能获取页面元素
+    driver.switch_to.frame("login")
+    driver.find_element(By.XPATH,"/html/body/div/div[2]/form/div/fieldset/div[2]/input[1]").send_keys(username)
+    driver.find_element(By.XPATH,"/html/body/div/div[2]/form/div/fieldset/div[2]/input[2]").send_keys(password)
+    driver.find_element(By.XPATH,"/html/body/div/div[2]/form/div/fieldset/table/tbody/tr[1]/td/div/div[1]/input[1]").click()
 
-    # 通过点击刚才获得的跳转按钮,实现刷新页面获取审稿状态
-    driver.find_element(By.XPATH,
-                        "/html/body/div[1]/form/div[1]/div/div[3]/div/ul/li[2]/a").click()
-    if driver.find_element(By.XPATH, statexpath).text != state:  # 如果审稿状态发生改变,则发送邮件通知
-        state = driver.find_element(By.XPATH, statexpath).text
+    time.sleep(10)  # EM系统访问较为缓慢，设置一个等待时间，从而保证获取页面元素
+    driver.switch_to.frame("content")  # EM系统的状态页面使用了JS动态加载1个iframe框架的方式，因此还需要先进入iframe中才能获取页面元素
+    driver.find_element(By.XPATH, "/html/body/div[1]/main/form/div[3]/div[2]/div/div/div[3]/fieldset/div/a").click()
+
+    time.sleep(10)  # EM系统访问较为缓慢，设置一个等待时间，从而保证获取页面元素
+    state = ""  # 审稿状态
+    if driver.find_element(By.XPATH,"/html/body/main/div/fieldset/form/div/table/tbody/tr/td[7]").text != state:  # 如果审稿状态发生改变,则发送邮件通知
+        state = driver.find_element(By.XPATH,"/html/body/main/div/fieldset/form/div/table/tbody/tr/td[7]").text
         print(state, datetime.datetime.now())
         # 如果每次状态更新,你希望通过邮件接收的话,否则请注释这行代码
-        SendEmail("发送者邮箱", "邮箱校验码", "接收者邮箱", "smtp.qq.com", state)#发送者与接收者可为同一个
+        # SendEmail("", "", "", "smtp.qq.com", state)  # 请自行设置
 
 
 def SendEmail(fromaddress, frompassword, toaddress, mailserver, state):  # 发送最新审稿状态的邮件
@@ -82,23 +107,18 @@ def SendEmail(fromaddress, frompassword, toaddress, mailserver, state):  # 发�
 
 
 if __name__ == '__main__':
-    while True:
-        try:
-            GetArticleState("投稿系统网址",
-                            "/html/body/div[1]/form/div[6]/div/div/div[1]/div[1]/div[2]/fieldset/div[2]/input",
-                            "/html/body/div[1]/form/div[6]/div/div/div[1]/div[1]/div[2]/fieldset/div[3]/div/div/input[1]",
-                            "投稿系统账号", "投稿系统密码",
-                            "/html/body/div[1]/form/div[6]/div/div/div[1]/div[1]/div[2]/fieldset/div[4]/a",
-                            "/html/body/div[1]/form/div[3]/div/div[2]/div[5]/div/table/tbody/tr/td[1]/table/tbody/tr/td[2]/span")  # ScholarOne投稿系统(IEEE、IET)可直接采用这个
-        except Exception as e:
-            GetArticleState("投稿系统网址",
-                            "/html/body/div[1]/form/div[6]/div/div/div[1]/div[1]/div[2]/fieldset/div[2]/input",
-                            "/html/body/div[1]/form/div[6]/div/div/div[1]/div[1]/div[2]/fieldset/div[3]/div/div/input[1]",
-                            "投稿系统账号", "投稿系统密码",
-                            "/html/body/div[1]/form/div[6]/div/div/div[1]/div[1]/div[2]/fieldset/div[4]/a",
-                            "/html/body/div[1]/form/div[3]/div/div[2]/div[5]/div/table/tbody/tr/td[1]/table/tbody/tr/td[2]/span")  # ScholarOne投稿系统(IEEE、IET)可直接采用这个
-        time.sleep(1800)  # 每隔多少秒后刷新一次状态,初始设置为30分钟(1800秒)
-    # 可将函数针对不同的期刊网站(如Editorial Manager、ScholarOne等)设置不同的参数,每次具体调用即可
-    # GetArticleState("")
-    # GetArticleState("")
-    # GetArticleState("")
+    Option = input()
+    if Option == "1": # ScholarOne投稿系统
+        while True:
+            try: # 捕捉异常，避免报错而停止运行
+                ScholarOne("https://mc.manuscriptcentral.com/tvt-ieee","用户名", "密码")
+            except Exception as e:
+                ScholarOne("https://mc.manuscriptcentral.com/tvt-ieee","用户名", "密码")
+            time.sleep(300)  # 每隔多少秒后刷新一次状态,初始设置为5分钟(300秒)
+    elif Option == "2": # EditorialManager投稿系统
+        while True:
+            try:
+                EditorialManager("https://www.editorialmanager.com/knosys/default2.aspx","用户名", "密码")
+            except Exception as e:
+                EditorialManager("https://www.editorialmanager.com/knosys/default2.aspx","用户名", "密码")
+            time.sleep(300)  # 每隔多少秒后刷新一次状态,初始设置为5分钟(300秒)
