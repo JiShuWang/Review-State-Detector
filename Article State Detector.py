@@ -18,7 +18,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 
 option = webdriver.ChromeOptions()
-# option.add_argument('headless')  # 浏览器后台运行
+option.add_argument('headless')  # 浏览器后台运行
 chromedriver_path = 'chromedriver.exe'  # chromedriver的地址
 """
 https://chromedriver.storage.googleapis.com/index.html
