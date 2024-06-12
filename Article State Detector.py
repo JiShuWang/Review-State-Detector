@@ -89,14 +89,13 @@ def SendEmail(fromaddress, frompassword, toaddress, mailserver, state):  # 发�
     state:string,最新的审稿状态,前一个函数中已获得
     使用邮件来发送最新审稿状态,容易存在邮件被误认为垃圾邮件的情况,因此建议使用短信发送的方法
     """
-    message = MIMEText("你的文章审稿状态已更新:" + state, "plain", "utf-8")  # 邮件内容,纯文本格式,编码
-    message['From'] = Header("审稿状态监控器")  # 发送者姓名
-    message["To"] = Header("你自己")  # 接收者姓名
+   message = MIMEText("你的文章审稿状态已更新: " + state, "plain", "utf-8")  # 邮件内容,纯文本格式,编码
+    message['From'] = "审稿状态监控器"  # 发送者姓名
+    message["To"] = Header("你自己", "utf-8")  # 接收者姓名
     message["Subject"] = Header("审稿状态更新:" + state, "utf-8")  # 邮件名,编码
 
     try:
-        smtpobj = smtplib.SMTP_SSL(mailserver)  # 建立连接
-        smtpobj.connect(mailserver, 465)  # 发起请求
+        smtpobj = smtplib.SMTP_SSL(mailserver.encode(), 465)  # 建立连接
         smtpobj.login(fromaddress, frompassword)  # 登录邮箱
         smtpobj.sendmail(fromaddress, toaddress, message.as_string())
         print("邮件发送成功")
@@ -113,12 +112,10 @@ if __name__ == '__main__':
             try: # 捕捉异常，避免报错而停止运行
                 ScholarOne("https://mc.manuscriptcentral.com/tvt-ieee","用户名", "密码")
             except Exception as e:
-                ScholarOne("https://mc.manuscriptcentral.com/tvt-ieee","用户名", "密码")
-            time.sleep(300)  # 每隔多少秒后刷新一次状态,初始设置为5分钟(300秒)
+                time.sleep(300)  # 每隔多少秒后刷新一次状态,初始设置为5分钟(300秒)
     elif Option == "2": # EditorialManager投稿系统
         while True:
             try:
                 EditorialManager("https://www.editorialmanager.com/knosys/default2.aspx","用户名", "密码")
             except Exception as e:
-                EditorialManager("https://www.editorialmanager.com/knosys/default2.aspx","用户名", "密码")
-            time.sleep(300)  # 每隔多少秒后刷新一次状态,初始设置为5分钟(300秒)
+                time.sleep(300)  # 每隔多少秒后刷新一次状态,初始设置为5分钟(300秒)
