@@ -35,6 +35,7 @@ def ScholarOne(url, username, password):  # ScholarOne投稿系统，IEEE常用
 
     driver = webdriver.Chrome(executable_path=chromedriver_path, chrome_options=option)  # 导入浏览器设置
     driver.get(url)  # 设置目标网址
+    time.sleep(5)  # 设置一个等待时间，保证在网络不佳情况下也能获取页面元素
     driver.find_element(By.XPATH,
                         "/html/body/div[1]/form/div[6]/div/div/div[1]/div[1]/div[2]/fieldset/div[2]/input").send_keys(
         username)  # 输入用户名
@@ -43,8 +44,10 @@ def ScholarOne(url, username, password):  # ScholarOne投稿系统，IEEE常用
         password)  # 输入密码
     driver.find_element(By.XPATH,
                         "/html/body/div[1]/form/div[6]/div/div/div[1]/div[1]/div[2]/fieldset/div[4]/a").click()  # 点击登录按钮
+    time.sleep(5)
     driver.find_element(By.XPATH, "/html/body/div[1]/form/div[1]/div/div[3]/div/ul/li[2]/a").click()  # 跳转Author页面
 
+    time.sleep(5)
     newest_status = ""  # 之前记录的审稿状态
     current_status = driver.find_element(By.XPATH,
                                          "/html/body/div[1]/form/div[3]/div/div[2]/div[5]/div/table/tbody/tr[1]/td[2]/table/tbody/tr/td[2]/span").text  # 本次获取的审稿状态
