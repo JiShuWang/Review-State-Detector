@@ -2,9 +2,9 @@
 
 ### Author: Jishu Wang
 ### Address: Yunnan University
-### Blog (Website): http://www.loveffc.cn
+### Homepage: http://www.loveffc.cn
 ### Contact: cswangjishu@hotmail.com
-### Note that: 如果您要使用该工具，或者进行任何本地化的改动，请记得点亮Star，这是对我的莫大鼓励。有好的建议或在使用过程中发现Bug请联系我~
+### Note that: 如果您觉得该工具有所帮助，或者想要进行任何本地化的改动，请Star~，这是对我的莫大鼓励。有好的建议或问题请联系我~
 
 -----------------------------------------------  
 
