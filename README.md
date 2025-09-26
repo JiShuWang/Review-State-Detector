@@ -16,8 +16,13 @@
 Chrome浏览器默认自动更新，会导致Chromedriver无法匹配，如果您想更好的使用该脚本，请关闭Chrome浏览器的自动更新。链接：https://blog.csdn.net/weixin_37858453/article/details/126600461
 ### 2.下载Chrome浏览器对应版本的Chromedriver驱动程序
 查看Chrome浏览器的版本：右上角设置栏 -> 帮助 -> 关于Google Chrome -> “版本 XXXX（正式版本） （64 位）”  
-链接：https://registry.npmmirror.com/binary.html?path=chromedriver/  
+链接：https://sites.google.com/corp/chromium.org/driver/（需翻墙）  
 例如Chrome浏览器为105.0.5195.127，则下载105.0.5195.X版本（向下兼容的原则）的Chrome Driver。
+
+或者使用以下命令进行安装
+'''pip install chromedriver-binary
+并在使用时进行导入
+'''import chromedriver_binary
 ### 3.将Chrome Driver放置到本代码的同路径下
 ### 4.使用浏览器的F12工具获取对应按钮的XPATH并替换程序代码中的XPATH
 ### 5.开启邮箱自动发送审稿状态的邮件
