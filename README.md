@@ -9,7 +9,7 @@
 -----------------------------------------------  
 
 ### 主要功能(两个语言的流程基本相同，请对照使用)
-针对当前不需验证码的投稿系统，该脚本可以高效定时的获取论文的审稿状态，包括IEEE与IET主要使用的ScholarOne、Elsevier使用的Editorial Manager等投稿系统。
+针对当前不需验证码的投稿系统，该脚本可以高效定时的获取论文的审稿状态，当前已覆盖IEEE旗下期刊主要使用的ScholarOne、Elsevier旗下期刊使用的Editorial Manager投稿系统。
 ### 步骤
 ### 1.下载Chrome浏览器
 链接：https://www.google.cn/intl/zh-CN/chrome/  
