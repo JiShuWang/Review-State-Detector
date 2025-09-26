@@ -18,8 +18,8 @@ Chrome浏览器默认自动更新，会导致Chromedriver无法匹配，如果�
 ### 2.1 exe版本
 查看Chrome浏览器的版本：右上角设置栏 -> 帮助 -> 关于Google Chrome -> “版本 XXXX（正式版本） （64 位）”  
 链接：https://sites.google.com/corp/chromium.org/driver/
-（需翻墙）  或者https://github.com/dreamshao/chromedriver（可能停止更新）。
-例如Chrome浏览器为105.0.5195.127，则下载105.0.5195.X版本（向下兼容的原则）的Chrome Driver。下载后将Chromedriver放置到本代码的同路径下，从而便于使用。
+（需翻墙）  或者https://github.com/dreamshao/chromedriver
+（可能停止更新）。例如Chrome浏览器为105.0.5195.127，则下载105.0.5195.X版本（向下兼容的原则）的Chrome Driver。下载后将Chromedriver放置到本代码的同路径下，从而便于使用。
 
 ### 2.2 python库
 或者使用以下命令进行安装
