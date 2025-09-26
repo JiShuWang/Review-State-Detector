@@ -18,11 +18,11 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 
 option = webdriver.ChromeOptions()
-option.add_argument('headless')  # 浏览器后台运行
+# option.add_argument('headless')  # 浏览器后台运行
 chromedriver_path = 'chromedriver.exe'  # chromedriver的地址
 """
 https://chromedriver.storage.googleapis.com/index.html
-点击此链接，根据你Chrome(谷歌)浏览器的版本,下载对应的chromedriver,并解压,然后将chromedriver的文件地址替换掉上述的地址
+点击此链接，根据你Chrome(谷歌)浏览器的版本,下载对应的chromedriver,并解压,然后将chromedriver.exe放到本代码的同目录下
 """
 
 
@@ -33,22 +33,29 @@ def ScholarOne(url, username, password):  # ScholarOne投稿系统，IEEE常用
     password:string, 投稿系统的密码
     """
 
-    driver = webdriver.Chrome(executable_path=chromedriver_path, chrome_options=option) # 导入浏览器设置
-    driver.get(url) # 设置目标网址
-    driver.find_element(By.XPATH,"/html/body/div[1]/form/div[6]/div/div/div[1]/div[1]/div[2]/fieldset/div[2]/input").send_keys(username) # 输入用户名
-    driver.find_element(By.XPATH,"/html/body/div[1]/form/div[6]/div/div/div[1]/div[1]/div[2]/fieldset/div[3]/div/div/input[1]").send_keys(password) # 输入密码
-    driver.find_element(By.XPATH,"/html/body/div[1]/form/div[6]/div/div/div[1]/div[1]/div[2]/fieldset/div[4]/a").click() # 点击登录按钮
-    driver.find_element(By.XPATH, "/html/body/div[1]/form/div[1]/div/div[3]/div/ul/li[2]/a").click() # 点击审稿状态页面
+    driver = webdriver.Chrome(executable_path=chromedriver_path, chrome_options=option)  # 导入浏览器设置
+    driver.get(url)  # 设置目标网址
+    driver.find_element(By.XPATH,
+                        "/html/body/div[1]/form/div[6]/div/div/div[1]/div[1]/div[2]/fieldset/div[2]/input").send_keys(
+        username)  # 输入用户名
+    driver.find_element(By.XPATH,
+                        "/html/body/div[1]/form/div[6]/div/div/div[1]/div[1]/div[2]/fieldset/div[3]/div/div/input[1]").send_keys(
+        password)  # 输入密码
+    driver.find_element(By.XPATH,
+                        "/html/body/div[1]/form/div[6]/div/div/div[1]/div[1]/div[2]/fieldset/div[4]/a").click()  # 点击登录按钮
+    driver.find_element(By.XPATH, "/html/body/div[1]/form/div[1]/div/div[3]/div/ul/li[2]/a").click()  # 跳转Author页面
 
-    state = ""  # 审稿状态
-    if driver.find_element(By.XPATH,"/html/body/div[1]/form/div[3]/div/div[2]/div[5]/div/table/tbody/tr[1]/td[1]/table/tbody/tr/td[2]/span").text != state:  # 如果审稿状态发生改变,则发送邮件通知
-        state = driver.find_element(By.XPATH,"/html/body/div[1]/form/div[3]/div/div[2]/div[5]/div/table/tbody/tr[1]/td[1]/table/tbody/tr/td[2]/span").text # 获取审稿状态
-        print(state, datetime.datetime.now())
-        # 如果每次状态更新,你希望通过邮件接收的话,否则请注释这行代码
-        # SendEmail("", "", "", "smtp.qq.com", state)  # 请自行设置
+    newest_status = ""  # 之前记录的审稿状态
+    current_status = driver.find_element(By.XPATH,
+                                         "/html/body/div[1]/form/div[3]/div/div[2]/div[5]/div/table/tbody/tr[1]/td[2]/table/tbody/tr/td[2]/span").text  # 本次获取的审稿状态
+    if current_status != newest_status:  # 如果审稿状态发生改变,则显示最新状态
+        newest_status = current_status  # 更新审稿状态
+        print(newest_status, datetime.datetime.now())
+        # 如果状态更新时你希望通过邮件接收的话,请不要注释这行代码，否则请注释
+        # SendEmail("", "", "", "smtp.qq.com", state)  # 请自行设置参数
 
 
-def EditorialManager(url, username, password):  # EditorialManager投稿系统，Elsevier、Springer常用
+def EditorialManager(url, username, password):  # Editorial Manager投稿系统，Elsevier常用
     """
     url:string, 你投稿期刊的网址
     usernamexpath:string, 使用网页开发工具找到用户名输入框的XPATH,下同
@@ -60,23 +67,26 @@ def EditorialManager(url, username, password):  # EditorialManager投稿系统�
     driver = webdriver.Chrome(executable_path=chromedriver_path, chrome_options=option)
     driver.get(url)
     time.sleep(10)  # EM系统访问较为缓慢，设置一个等待时间，从而保证获取页面元素
-    
-    driver.switch_to.frame("content") # EM系统的登录页面使用了JS动态加载2个iframe框架的方式，因此还需要先进入iframe中才能获取页面元素
+
+    driver.switch_to.frame("content")  # EM系统的登录页面使用了JS动态加载2个iframe框架的方式，因此还需要先进入iframe中才能获取页面元素
     driver.switch_to.frame("login")
-    driver.find_element(By.XPATH,"/html/body/div/div[2]/form/div/fieldset/div[2]/input[1]").send_keys(username)
-    driver.find_element(By.XPATH,"/html/body/div/div[2]/form/div/fieldset/div[2]/input[2]").send_keys(password)
-    driver.find_element(By.XPATH,"/html/body/div/div[2]/form/div/fieldset/table/tbody/tr[1]/td/div/div[1]/input[1]").click()
+    driver.find_element(By.XPATH, "/html/body/div/div[2]/form/div/fieldset/div[2]/input[1]").send_keys(username)
+    driver.find_element(By.XPATH, "/html/body/div/div[2]/form/div/fieldset/div[2]/input[2]").send_keys(password)
+    driver.find_element(By.XPATH,
+                        "/html/body/div/div[2]/form/div/fieldset/table/tbody/tr[1]/td/div/div[1]/input[1]").click()
 
     time.sleep(10)  # EM系统访问较为缓慢，设置一个等待时间，从而保证获取页面元素
     driver.switch_to.frame("content")  # EM系统的状态页面使用了JS动态加载1个iframe框架的方式，因此还需要先进入iframe中才能获取页面元素
     driver.find_element(By.XPATH, "/html/body/div[1]/main/form/div[3]/div[2]/div/div/div[3]/fieldset/div/a").click()
 
     time.sleep(10)  # EM系统访问较为缓慢，设置一个等待时间，从而保证获取页面元素
-    state = ""  # 审稿状态
-    if driver.find_element(By.XPATH,"/html/body/main/div/fieldset/form/div/table/tbody/tr/td[7]").text != state:  # 如果审稿状态发生改变,则发送邮件通知
-        state = driver.find_element(By.XPATH,"/html/body/main/div/fieldset/form/div/table/tbody/tr/td[7]").text
-        print(state, datetime.datetime.now())
-        # 如果每次状态更新,你希望通过邮件接收的话,否则请注释这行代码
+    newest_status = ""  # 之前记录的审稿状态
+    current_status = driver.find_element(By.XPATH,
+                                         "/html/body/main/div/fieldset/form/div/table/tbody/tr/td[7]").text
+    if current_status != newest_status:  # 如果审稿状态发生改变,则显示最新状态
+        newest_status = current_status
+        print(newest_status, datetime.datetime.now())
+        # 如果状态更新时你希望通过邮件接收的话,请不要注释这行代码，否则请注释
         # SendEmail("", "", "", "smtp.qq.com", state)  # 请自行设置
 
 
@@ -89,8 +99,9 @@ def SendEmail(fromaddress, frompassword, toaddress, mailserver, state):  # 发�
     state:string,最新的审稿状态,前一个函数中已获得
     使用邮件来发送最新审稿状态,容易存在邮件被误认为垃圾邮件的情况,因此建议使用短信发送的方法
     """
-   message = MIMEText("你的文章审稿状态已更新: " + state, "plain", "utf-8")  # 邮件内容,纯文本格式,编码
-    message['From'] = "审稿状态监控器"  # 发送者姓名
+
+    message = MIMEText("你的文章审稿状态已更新: " + state, "plain", "utf-8")  # 邮件内容,纯文本格式,编码
+    message['From'] = "ArticleStatusUpdate"  # 发送者姓名
     message["To"] = Header("你自己", "utf-8")  # 接收者姓名
     message["Subject"] = Header("审稿状态更新:" + state, "utf-8")  # 邮件名,编码
 
@@ -106,16 +117,22 @@ def SendEmail(fromaddress, frompassword, toaddress, mailserver, state):  # 发�
 
 
 if __name__ == '__main__':
-    Option = input()
-    if Option == "1": # ScholarOne投稿系统
+    Option = "1"  # 1：ScholarOne，2：Editorial Manager
+    # Option = input()
+    # 可以默认设定，也可以手动输入来选择投稿系统
+
+    if Option == "1":  # ScholarOne投稿系统
         while True:
-            try: # 捕捉异常，避免报错而停止运行
-                ScholarOne("https://mc.manuscriptcentral.com/tvt-ieee","用户名", "密码")
+            try:  # 捕捉异常，避免报错而停止运行
+                ScholarOne("https://mc.manuscriptcentral.com/t-its", "用户名", "密码")  # 以IEEE TITS期刊为例
             except Exception as e:
-                time.sleep(300)  # 每隔多少秒后刷新一次状态,初始设置为5分钟(300秒)
-    elif Option == "2": # EditorialManager投稿系统
+                ScholarOne("https://mc.manuscriptcentral.com/t-its", "用户名",
+                           "密码")  # 以IEEE TITS期刊为例
+            time.sleep(300)  # 每隔多少秒后刷新一次状态,默认设置为5分钟(300秒)
+    elif Option == "2":  # Editorial Manager投稿系统
         while True:
             try:
-                EditorialManager("https://www.editorialmanager.com/knosys/default2.aspx","用户名", "密码")
+                EditorialManager("https://www.editorialmanager.com/knosys/default2.aspx", "用户名", "密码")  # 以KBS期刊为例
             except Exception as e:
-                time.sleep(300)  # 每隔多少秒后刷新一次状态,初始设置为5分钟(300秒)
+                EditorialManager("https://www.editorialmanager.com/knosys/default2.aspx", "用户名", "密码")  # 以KBS期刊为例
+            time.sleep(300)
