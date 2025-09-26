@@ -1,4 +1,4 @@
-## Review-State-Detector
+## Review-Status-Detector
 
 ### Author: Jishu Wang
 ### Address: Yunnan University
